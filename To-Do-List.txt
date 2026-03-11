@@ -1,0 +1,94 @@
+import datetime # Tarih işlemleri için gerekli kütüphane
+
+baslik = []
+
+while True:
+    print("\nTo-Do-List Uygulamasına Hoşgeldiniz")
+    print("--->...MENÜ...<---")
+    print("1.Yeni Kayıt Aç")
+    print("2.Kayıtları Görüntüle")
+    print("3.Kayıtları Güncelle/Düzenle")
+    print("4.Kayıtları Sil")
+    print("5.Çıkış Yap")
+    print("<------------------>")
+
+    secim_str = input("İşlem Seçiniz: ")
+
+    if secim_str.isdigit():
+        secim = int(secim_str)
+
+        # 1. Yeni Kayıt Ekleme
+        if secim == 1:
+            yeni_is = input("Eklenecek Yeni Görevi Yazınız: ")
+            # Şu anki tarihi alıp formatlıyoruz (Gün.Ay.Yıl Saat:Dakika)
+            su_an = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+            
+            # Veriyi sözlük yapısında kaydediyoruz
+            veri = {"gorev": yeni_is, "tarih": su_an}
+            baslik.append(veri)
+            print(f"Yeni Görev Eklendi: {yeni_is} (Tarih: {su_an})")
+
+        # 2. Kayıtları Görüntüle
+        elif secim == 2:
+            print("\nYapılacak Görevler: ")
+            if len(baslik) == 0:
+                print("Kayıt Bulunamadı")
+            else:
+                for i, oge in enumerate(baslik):
+                    # oge['tarih'] ve oge['gorev'] şeklinde verilere ulaşıyoruz
+                    print(f"{i + 1}. [{oge['tarih']}] - {oge['gorev']}")
+
+        # 3. Kayıtları Güncelle
+        elif secim == 3:
+            if len(baslik) == 0:
+                print("Güncellenecek Kayıt Bulunamadı")
+            else:
+                print("\nMevcut Görevler:")
+                for i, oge in enumerate(baslik):
+                    print(f"{i + 1}. {oge['gorev']}")
+
+                degisecek_no_str = input("Güncellenecek Kayıt Numarasını Giriniz: ")
+                if degisecek_no_str.isdigit():
+                    indeks = int(degisecek_no_str) - 1
+                    if 0 <= indeks < len(baslik):
+                        yeni_metin = input("Yeni Görev Metnini Giriniz: ")
+                        yeni_tarih = datetime.datetime.now().strftime("%d.%m.%Y %H:%M")
+                        
+                        # Hem metni hem de güncelleme tarihini değiştiriyoruz
+                        baslik[indeks]["gorev"] = yeni_metin
+                        baslik[indeks]["tarih"] = yeni_tarih + " (Güncellendi)"
+                        print("Kayıt Başarıyla Güncellendi!")
+                    else:
+                        print("Geçersiz Numara Girdiniz")
+                else:
+                    print("Lütfen Sadece Sayı Giriniz!")
+
+        # 4. Kayıtları Sil
+        elif secim == 4:
+            if len(baslik) == 0:
+                print("Silinecek Bir Kayıt Bulunamadı")
+            else:
+                print("\nMevcut Görevler:")
+                for i, oge in enumerate(baslik):
+                    print(f"{i + 1}. {oge['gorev']}")
+
+                silinecek_no_str = input("Silinecek Kayıt Numarasını Giriniz: ")
+                if silinecek_no_str.isdigit():
+                    indeks = int(silinecek_no_str) - 1
+                    if 0 <= indeks < len(baslik):
+                        silinen = baslik.pop(indeks)
+                        print(f"Başarılı! '{silinen['gorev']}' silindi")
+                    else:
+                        print("Geçersiz Numara Girdiniz")
+                else:
+                    print("Lütfen Sadece Sayı Giriniz")
+
+        # 5. Çıkış Yap
+        elif secim == 5:
+            print("Çıkış Yapıldı. İyi günler!")
+            break
+
+        else:
+            print(f"Geçersiz Seçim: {secim}. Lütfen 1-5 arası bir sayı giriniz.")
+    else:
+        print(f"Hatalı seçim: '{secim_str}'. Lütfen sadece sayı giriniz.")
